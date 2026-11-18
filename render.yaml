@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: preppilot
+    runtime: docker
+    plan: starter
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: preppilot-db
+          property: connectionString
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: PYTHONUNBUFFERED
+        value: "1"
+
+databases:
+  - name: preppilot-db
+    plan: basic-256mb
+    databaseName: preppilot
+    user: preppilot
