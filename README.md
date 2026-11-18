@@ -1,151 +1,488 @@
-# PrepPilot
 
-A JEE preparation workspace built with Streamlit, SQLAlchemy and SQLite/PostgreSQL. This is a fresh replacement for the earlier PrepPilot prototype. It uses a new local database file named `data/preppilot_v2.db`; it does **not** overwrite or migrate the old `preppilot.db`.
 
-## Included modules
+📘 PrepPilot
 
-- **Accounts:** account creation, PBKDF2-SHA256 password hashing, persistent login-failure throttling and inactivity expiry.
-- **Dashboard:** question-bank count, mock/practice totals, daily study progress, pending revisions and recent results.
-- **Question bank:** manual MCQ/numerical question entry, CSV import/export, filters, preview and deletion of your own questions. Your imported questions are private to your account. Seed questions are shared read-only examples.
-- **Practice:** subject/chapter/difficulty filters, MCQ and numerical answers, instant feedback, explanations and saved history.
-- **JEE mock tests:** custom tests and a 75-question JEE Main template (20 MCQ + 5 numerical per subject), 3-hour timer, question palette, section filter, previous/next navigation, mark for review, answer autosave to the database, resume after refresh/re-login, automatic timeout submission, +4/−1/0 marking, subject analysis and question review.
-- **Performance:** chapter-level accuracy, unanswered rate, mock score trend and subject comparison.
-- **Recommendations:** prioritisation based on recorded performance.
-- **Revision planner:** manual tasks, performance-based smart plans, completion/reopen/delete actions.
-- **Study tracker:** daily target, study-session log and 30-day chart.
-- **Mistake notebook:** incorrect practice and mock answers are collected for review; add notes and mark them resolved.
-- **Bookmarks:** collect questions for later revision.
-- **Reports:** PDF progress report, CSV exports and JSON export of progress, revision tasks, mistake notes and bookmarks.
-- **AI doubt solver:** optional OpenAI API integration. It is disabled unless a key is configured. API usage may cost money.
+A focused JEE preparation workspace
 
-## Requirements
+Practice questions, take timed mock tests, track performance, plan revision, and keep your study progress in one place.
 
-- Python 3.10 or newer (Python 3.12 is recommended)
-- macOS, Windows or Linux
-- Internet connection only for installing packages and using the optional AI feature
 
-## Run locally on macOS
 
-Open Terminal in the project folder and run:
 
-```bash
+
+
+
+Open the live demo
+
+
+
+
+
+Overview
+
+PrepPilot is a web-based study companion for students preparing for JEE. It combines question practice, exam-style mock tests, performance insights, revision planning, and study tracking in a single Streamlit application.
+
+The project runs locally with SQLite and can use PostgreSQL when deployed. It is designed as a practical learning and portfolio project. It is not an official JEE platform and does not provide an official or complete question bank.
+
+Features
+
+
+
+
+
+
+
+Area
+
+
+
+What it includes
+
+
+
+
+
+Accounts
+
+
+
+Account creation, PBKDF2-SHA256 password hashing, login-failure throttling, and session inactivity expiry
+
+
+
+
+
+Dashboard
+
+
+
+Study progress, available questions, mock-test totals, practice activity, and pending revision tasks
+
+
+
+
+
+Question bank
+
+
+
+Add MCQ and numerical questions, import/export CSV, filter by subject/chapter/difficulty, and manage private questions
+
+
+
+
+
+Practice
+
+
+
+Filtered practice sessions, instant feedback, explanations, and saved attempt history
+
+
+
+
+
+JEE mock tests
+
+
+
+Custom tests and a 75-question JEE Main-style template, timed attempts, question palette, mark-for-review, autosave, resume, and result analysis
+
+
+
+
+
+Performance
+
+
+
+Chapter accuracy, unanswered rate, mock-test trends, and subject comparisons
+
+
+
+
+
+Recommendations
+
+
+
+Suggested focus areas based on recorded performance
+
+
+
+
+
+Revision planner
+
+
+
+Manual revision tasks and performance-informed task suggestions
+
+
+
+
+
+Study tracker
+
+
+
+Daily study target, session logging, and a 30-day progress view
+
+
+
+
+
+Mistake notebook
+
+
+
+Review incorrect answers, add notes, and mark items resolved
+
+
+
+
+
+Bookmarks
+
+
+
+Save questions for later review
+
+
+
+
+
+Reports
+
+
+
+PDF progress report and CSV/JSON exports
+
+
+
+
+
+AI doubt solver
+
+
+
+Optional OpenAI-powered explanations, disabled unless an API key is configured
+
+
+
+Question-bank note: The built-in bank contains 12 illustrative sample questions so a new account can explore the app. It is not a complete, official, or independently verified JEE question bank. Import material only when you have permission to use it, and verify answers before relying on them.
+
+Technology
+
+
+
+
+
+Application: Python, Streamlit
+
+
+
+Data layer: SQLAlchemy
+
+
+
+Databases: SQLite for local use; PostgreSQL for hosted deployments
+
+
+
+Data and reports: Pandas, ReportLab
+
+
+
+Optional AI: OpenAI API
+
+
+
+Testing: pytest
+
+
+
+Deployment examples: Streamlit Community Cloud, Neon PostgreSQL, Docker
+
+Quick start
+
+Requirements
+
+
+
+
+
+Python 3.10 or newer (Python 3.12 recommended)
+
+
+
+macOS, Windows, or Linux
+
+
+
+Internet access to install dependencies
+
+macOS / Linux
+
+git clone https://github.com/YOUR_GITHUB_USERNAME/preppilot.git
+cd preppilot
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 streamlit run app.py
-```
 
-Or double-click `start_mac.command` to create the virtual environment, install dependencies and launch the app. The first run needs an internet connection to install packages. Open the local URL printed by Streamlit, usually `http://localhost:8501`, then create your account.
+Open the local address printed by Streamlit, usually http://localhost:8501, and create an account.
 
-### Optional AI doubt solver
+On macOS, you can also run ./start_mac.command from the project folder.
 
-Set the API key in the same Terminal window before starting the app:
+Windows
 
-```bash
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_MODEL="gpt-4o-mini"
+git clone https://github.com/YOUR_GITHUB_USERNAME/preppilot.git
+cd preppilot
+py -3.12 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
 streamlit run app.py
-```
 
-Do not commit API keys or put them in source code. The AI page sends prompts to OpenAI and may incur usage charges.
+Or run start_windows.bat from the project folder.
 
-## Question bank CSV
+Configuration
 
-Use **Download CSV template** in Question Bank. Required columns:
+PrepPilot works without optional API credentials. Local development uses SQLite by default and creates data/preppilot_v2.db.
 
-`subject, chapter, difficulty, question_type, question_text, correct_answer`
 
-For MCQ, also provide `option_a, option_b, option_c, option_d`; `correct_answer` must be A/B/C/D. For NUMERICAL, `correct_answer` must be a number and `numeric_tolerance` is optional. Subjects are `Physics`, `Chemistry`, `Mathematics`; difficulty is `Easy`, `Medium`, `Hard`; question type is `MCQ` or `NUMERICAL`.
 
-Only import questions you have permission to use. Check every answer and explanation before relying on it. The small built-in set is illustrative sample content, not a complete or officially verified JEE question bank.
 
-## Mock-test behaviour
 
-- Custom tests let you choose subjects, chapters, difficulty, question count and duration.
-- JEE Main 75 mode requires at least 20 MCQs and 5 numerical questions per subject from the question bank. It uses a 180-minute timer and +4/−1/0 scoring. If your bank does not contain enough questions, the app explains which quota is missing. Use Custom mode until your bank is large enough.
-- Answers and mark-for-review flags are saved in the database. An in-progress test can be resumed after a page refresh or a new login.
-- The timer is checked by the server on each app refresh; the app submits when the deadline has passed. Keep the browser tab open during an exam so the countdown refreshes. The server deadline remains stored even if the browser closes.
-- A submitted attempt is immutable in the UI and is saved once. A repeated submit request returns the already-saved result.
 
-## Database and backups
 
-Local development uses SQLite at `data/preppilot_v2.db`. The earlier database is left untouched. Keep the project folder private and back up the database regularly.
+Variable
 
-Create a consistent SQLite backup:
 
-```bash
-python scripts/backup_sqlite.py
-```
 
-For PostgreSQL deployments, use your provider's automated backups and `pg_dump`. Do not rely on a container's local filesystem for persistent production data.
+Required
 
-## Deploy with Docker
 
-Build and run locally:
 
-```bash
-docker build -t preppilot .
-docker run --rm -p 8501:8501 -e PORT=8501 -v "$PWD/data:/app/data" preppilot
-```
+Purpose
 
-For a hosted deployment, use a managed PostgreSQL database and set `DATABASE_URL` to a PostgreSQL connection string. `render.yaml` is included as a starting point for Render Blueprint deployment. Review the selected hosting plan, database storage, costs, region and backup settings before creating paid resources.
 
-## Free cloud deployment (Streamlit Community Cloud + Neon)
 
-1. Push the contents of this project folder to a GitHub repository. Keep `.env`, `.streamlit/secrets.toml`, database files and passwords out of Git.
-2. Create a PostgreSQL project on Neon and copy its pooled connection string from **Connect**. Keep the full URL private.
-3. Deploy `app.py` from that GitHub repository on Streamlit Community Cloud.
-4. In the app deployment's **Advanced settings → Secrets**, add:
 
-   ```toml
-   DATABASE_URL = "paste-your-Neon-pooled-connection-string-here"
-   ```
 
-5. Optionally add `OPENAI_API_KEY = "your-key"` to the same Secrets panel to enable the AI doubt solver. API usage may cost money.
-6. Choose Python 3.12 in Advanced settings, deploy, then test account creation, login, question import, practice, mock autosave and report export.
+PREPPILOT_DATA_DIR
 
-The database layer reads `DATABASE_URL` from Streamlit secrets or the host environment. Cloud data is stored in PostgreSQL rather than the app's temporary local filesystem. The free hosting tiers have usage limits and are suitable for a personal project or prototype, not a guaranteed production service. Keep separate backups of important data and do not invite users to enter sensitive information.
 
-## Security and production deployment checklist
 
-This project includes parameterised ORM queries, password hashing, login throttling, user-scoped private questions and user-owned records, session inactivity expiry, Streamlit XSRF protection, non-root Docker execution and PostgreSQL support. However, a code package cannot be certified as production-ready without testing in the actual deployment environment.
+No
 
-Before inviting real users:
 
-1. Deploy behind HTTPS and use a managed PostgreSQL database.
-2. Set database credentials and API keys as hosting secrets, never in Git.
-3. Configure automated database backups and test a restore.
-4. Set sensible hosting limits, monitoring and alerting.
-5. Test concurrent logins, concurrent mock submissions, large CSV imports and network interruptions.
-6. Review privacy terms, retention, account recovery and applicable data-protection requirements.
-7. Run the automated tests and perform a manual end-to-end test on the hosted URL.
-8. Add an email verification and password-reset flow before treating it as a public multi-user service. The current local account system has no email recovery.
 
-Streamlit is a rapid application framework, not a full custom identity platform. For a high-traffic commercial service, consider moving authentication to a dedicated identity provider and separating the API/backend from the UI.
+Directory for the local SQLite database; defaults to ./data
 
-## Run tests
 
-```bash
-pip install -r requirements-dev.txt
-pytest -q
-```
 
-The test suite uses an isolated temporary SQLite database and does not touch your local PrepPilot data.
 
-## Replace your old project
 
-1. Download and extract the new project ZIP.
-2. Keep the old project folder and old database as a backup.
-3. Open the extracted `PrepPilot_Production` folder in VS Code.
-4. Follow the local install steps above.
-5. Create a new account and import your question CSV.
-6. Verify the features before deleting or archiving anything from the old project.
+DATABASE_URL
 
-The new build starts with a separate database so the old data remains untouched. If you want to migrate the previous prototype's data, first make a copy of the old `preppilot.db`, then run this from the new project folder:
 
-```bash
-python scripts/migrate_legacy_sqlite.py "/full/path/to/old/preppilot.db"
-```
 
-Type `YES` when prompted. The script opens the old database read-only, converts the old PBKDF2 password-hash format without needing plaintext passwords, and imports users, questions, mock history, practice history and revision tasks. It refuses to import into a target database that already contains user data. You can add `--yes` to skip the confirmation prompt. Check that the new accounts and records work before archiving the old database.
+Hosted PostgreSQL only
+
+
+
+SQLAlchemy database connection URL
+
+
+
+
+
+OPENAI_API_KEY
+
+
+
+No
+
+
+
+Enables the optional AI doubt solver; API usage may incur charges
+
+
+
+
+
+OPENAI_MODEL
+
+
+
+No
+
+
+
+OpenAI model name; defaults to gpt-4o-mini
+
+For local environment variables, copy .env.example to .env and edit it. Do not commit .env, .streamlit/secrets.toml, database files, or API keys. The app reads DATABASE_URL and OPENAI_API_KEY from environment variables or Streamlit secrets.
+
+Example Streamlit secrets file (use placeholders only in source control):
+
+DATABASE_URL = "postgresql+psycopg://USER:PASSWORD@HOST/DATABASE?sslmode=require"
+# OPENAI_API_KEY = "your-api-key"
+# OPENAI_MODEL = "gpt-4o-mini"
+
+Deploying
+
+For the current hosted demo, see the deployment guide. It covers Streamlit Community Cloud with Neon PostgreSQL, environment secrets, validation checks, and backup considerations.
+
+A Dockerfile and a Render Blueprint example are also included. Review the hosting provider's current pricing, resource limits, database retention, region, and backup options before deploying. The included Render configuration uses paid plan identifiers and may create billable resources.
+
+Question-bank CSV format
+
+Use Download CSV template in Question Bank to get a starter file.
+
+Required columns:
+
+subject, chapter, difficulty, question_type, question_text, correct_answer
+
+For MCQs, also include option_a, option_b, option_c, and option_d. Set correct_answer to A, B, C, or D. For numerical questions, use a numeric correct_answer; numeric_tolerance is optional.
+
+Accepted values:
+
+
+
+
+
+Subjects: Physics, Chemistry, Mathematics
+
+
+
+Difficulty: Easy, Medium, Hard
+
+
+
+Question type: MCQ, NUMERICAL
+
+Mock-test behaviour
+
+
+
+
+
+Custom tests let you select subjects, chapters, difficulty, question count, and duration.
+
+
+
+The 75-question JEE Main-style mode requires at least 20 MCQs and 5 numerical questions per subject in the question bank.
+
+
+
+The standard mode uses a 180-minute timer and +4 / -1 / 0 marking.
+
+
+
+Answers and review flags are saved to the database. An in-progress attempt can be resumed after a refresh or a later login.
+
+
+
+The server-side deadline is stored. Keep the browser tab open during a test to see the countdown refresh; the attempt is submitted when the app next checks after the deadline.
+
+
+
+Submitted attempts are not editable through the app.
+
+Data, privacy, and limitations
+
+
+
+
+
+Local data is stored in data/preppilot_v2.db. Back it up before moving or replacing a local project folder.
+
+
+
+Hosted deployments should use managed PostgreSQL and provider-managed backups. Do not depend on ephemeral application storage for user data.
+
+
+
+The current account system does not include email verification, password reset, or account recovery.
+
+
+
+The optional AI feature sends the entered prompt and recent conversation context to OpenAI. Do not enter passwords, private records, or sensitive personal information.
+
+
+
+The project has automated tests, but those tests do not constitute a security audit or a guarantee of production readiness.
+
+
+
+Before inviting a wider audience, review authentication, privacy, data retention, abuse controls, backup restoration, accessibility, and applicable legal requirements.
+
+Development
+
+Install development dependencies and run the test suite:
+
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+python -m compileall -q .
+
+The tests use a temporary SQLite database and do not modify your personal PrepPilot database.
+
+See CONTRIBUTING.md for the contribution workflow, docs/ARCHITECTURE.md for the application structure, PRIVACY.md for the project data-handling summary, and GITHUB_SETUP.md for repository settings and release steps.
+
+Repository layout
+
+.
+├── app.py                    # Streamlit entry point and navigation
+├── database.py               # SQLAlchemy models, queries, and initialization
+├── auth_ui.py                # Login and registration UI
+├── security.py               # Password hashing and validation
+├── mock_engine.py            # Mock-test scoring helpers
+├── mock_ui.py                # Timed mock-test interface
+├── question_bank_ui.py       # Question bank and CSV workflows
+├── study_ui.py               # Practice, analytics, revision, and study tracking
+├── reports_ui.py             # PDF and data exports
+├── ai_tutor_ui.py            # Optional AI doubt solver
+├── scripts/                  # Backup and legacy migration utilities
+├── tests/                    # Automated tests
+├── docs/                     # Architecture and deployment guides
+└── .github/                  # CI, issue templates, and repository automation
+
+Roadmap
+
+Potential next steps include:
+
+
+
+
+
+Add email verification and secure password recovery.
+
+
+
+Add a reviewed and properly licensed larger question bank.
+
+
+
+Expand automated tests for PostgreSQL and concurrent mock submissions.
+
+
+
+Add accessibility and mobile-layout checks.
+
+
+
+Add database schema migrations for future releases.
+
+License
+
+No open-source license has been selected for this repository yet. All rights are reserved by default; public visibility does not grant permission to reuse, redistribute, or modify the source. Choose and add a license before inviting outside contributions or presenting the project as open source.
+
+
+
+
+
+Built as an independent JEE preparation project.
+
